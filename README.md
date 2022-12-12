@@ -7,16 +7,25 @@ Wrote code to compress any standard Wikipedia dump to an inverted index of 1/4th
 In this project, primary task is to build a scalable and efficient search engine on Wikipedia pages. This constitutes two stages - inverted index creation and query search mechanism, where the scope of performance in the second stage relies heavily on the quality of index built in its preceding stage. Throughout the project, efforts have been made to build a system optimized for search time, search efficiency (i.e. the quality of results), indexing time and index size. We have used Wikipedia dumps of size 80GB in XML format, which is parsed to get Wikipedia pages.
 
 ### Constructing the Inverted Index
-* BasicStages(inorder):
-* XML parsing: SAX parser used
-* Data preprocessing 
-: NLTK used
-  * Tokenization 
-  * Case folding
-  * Stop words removal
-  * Stemming
-* Posting List / Inverted Index Creation
-* Optimize
++ Parsing: SAX Parser is used to parse the XML corpus.
++ Casefolding: Converting Upper Case to Lower Case.
++ Tokenisation: It is done using regex.
++ Stop Word Removal: Stop words are removed by referring to the stop word list returned by nltk.
++ Stemming: A python library PyStemmer is used for this purpose.
++ Creating various index files with word to field postings.
++ Multi-way External sorting on the index files to create field based files along with their respective offsets.
+
+### Searching:
++ The query given is parsed, processed and given to the respective query handler(simple or field).
++ One by one word is searched in vocabulary and the file number is noted.
++ The respective field files are opened and the document ids along with the frequencies are noted.
++ The documents are ranked on the basis of TF-IDF scores.
++ The title of the documents are extracted using title.txt
+
+### Files Produced
++ index*.txt (intermediate files) : It consists of words with their posting list. Eg. <word> d1b2t4c5 d5b3t6l1
++ title.txt : It consist of id-title mapping.
++ queries_op.txt : stores output of queries  
 
 ### Features:
 * Support for Field Queries . Fields include Title, Infobox, Body, Category, Links, and
